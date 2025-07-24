@@ -1,4 +1,4 @@
-import express from 'express';
+/* import express from 'express';
 import cors from 'cors';
 import Stripe from 'stripe';
 
@@ -66,4 +66,4 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`✅ Stripe payment server running on port ${PORT}`);
   console.log(`🔗 Frontend should connect to: http://localhost:${PORT}`);
-});
+}); */
