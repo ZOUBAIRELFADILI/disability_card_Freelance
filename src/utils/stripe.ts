@@ -1,7 +1,7 @@
 import { loadStripe } from '@stripe/stripe-js';
 
 // Initialize Stripe with your publishable key
-const stripePromise = loadStripe('pk_test_51R208k2em5dbbL8YLOXNLLwKGDxjk20RLvZ1Nk4VIiZ5PuiItY4VSNWUXgjl5oPyEoiqV4yvhSBt6aFJVDAsFLPd00UIHu6eba');
+const stripePromise = loadStripe('');
 
 export default stripePromise;
 
