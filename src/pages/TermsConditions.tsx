@@ -1,5 +1,4 @@
-import React from 'react';
-import { FileText, Shield, AlertCircle, CheckCircle, Eye, Lock, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Eye, FileText, Lock, Shield } from 'lucide-react';
 
 const TermsConditions = () => {
   return (
@@ -28,10 +27,10 @@ const TermsConditions = () => {
               <h2 className="text-2xl font-bold text-gray-900">Terms and Conditions</h2>
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern Global Carers and Disability Cards (GCDC)'s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
+              Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern National Disability Aid Cards  ( NDAid)'s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              The term 'Global Carers and Disability Cards (GCDC) or 'us' or 'we' refers to the owner of the website whose registered for Global Carers and Disability Cards (GCDC). The term 'you' refers to the user or viewer of our website.
+              The term 'National Disability Aid Cards  ( NDAid) or 'us' or 'we' refers to the owner of the website whose registered for National Disability Aid Cards  ( NDAid). The term 'you' refers to the user or viewer of our website.
             </p>
           </div>
 
@@ -54,7 +53,7 @@ const TermsConditions = () => {
                     <li>• Unauthorized use of this website may give rise to a claim for damages and/or be a criminal offense.</li>
                     <li>• From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).</li>
                     <li>• Use of this website and these terms are governed by the international law of privacy protection and copyright.</li>
-                    <li>• If you wish to use any material on our website in any other way, including for commercial purposes, please write to our Digital Content Manager by email to support@gcdc.help</li>
+                    <li>• If you wish to use any material on our website in any other way, including for commercial purposes, please write to our Digital Content Manager by email to support@NDAid.help</li>
                   </ul>
                 </div>
               </div>
@@ -84,7 +83,7 @@ const TermsConditions = () => {
               
               <div className="space-y-4 text-gray-700">
                 <div>
-                  <p>Keep your community username and password secure at all times and to contact us by emailing support@gcdc.help</p>
+                  <p>Keep your community username and password secure at all times and to contact us by emailing support@NDAid.help</p>
                   <p>We have the right to disable any user identification code or password, whether chosen by you or allocated by us, at any time, if in our reasonable opinion you have failed to comply with any of the provisions of these terms of use.</p>
                 </div>
               </div>
@@ -166,7 +165,7 @@ const TermsConditions = () => {
                     <li>• you are granting us a worldwide, irrevocable, royalty-free licence for commercial or non-commercial purposes to display the material in all and any media in its original format or edited, altered or combined with other works;</li>
                     <li>• you are not entitled to make any claim for payment, editorial control, use or any works derived from it;</li>
                     <li>• that these permissions may not be withdrawn and shall last forever, binding on you, your successors and assignees; and</li>
-                    <li>• you are granting to all other users of GCDC's website the right to access such material and to view, store and reproduce the material for personal use and to enforce these Terms of use against you if you breach them.</li>
+                    <li>• you are granting to all other users of  NDAid's website the right to access such material and to view, store and reproduce the material for personal use and to enforce these Terms of use against you if you breach them.</li>
                   </ul>
                 </div>
               </div>
@@ -211,7 +210,7 @@ const TermsConditions = () => {
               </h3>
               
               <div className="space-y-4 text-gray-700">
-                <p>We welcome your comments about our website. If you find anything incorrect, not working or want to say anything else, please email to support@gcdc.help</p>
+                <p>We welcome your comments about our website. If you find anything incorrect, not working or want to say anything else, please email to support@NDAid.help</p>
               </div>
             </div>
 
@@ -222,10 +221,10 @@ const TermsConditions = () => {
                 If you have any questions about these terms and conditions, please contact us:
               </p>
               <div className="space-y-2 text-gray-700">
-                <p><strong>Email:</strong> support@gcdc.help</p>
+                <p><strong>Email:</strong> support@NDAid.help</p>
                 <p><strong>Phone:</strong> +971 4 XXX XXXX</p>
                 <p><strong>Address:</strong> Dubai, United Arab Emirates</p>
-                <p><strong>Website:</strong> www.gcdc.ae</p>
+                <p><strong>Website:</strong> www.NDAid.help</p>
               </div>
             </div>
 

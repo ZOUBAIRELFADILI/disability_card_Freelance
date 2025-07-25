@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { ChevronDown, Heart, Menu, Phone, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, CreditCard, Heart, Phone } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -106,8 +106,8 @@ const Header = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
               <img 
-                src="/Logo.png" 
-                alt="GCDC Logo" 
+                src="/Logo_VF.png" 
+                alt=" NDAid Logo" 
                 className="h-20 w-auto group-hover:scale-105 transition-transform duration-300"
               />
               <div>

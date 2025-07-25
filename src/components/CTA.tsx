@@ -1,6 +1,5 @@
-import React from 'react';
+import { ArrowRight, Clock, CreditCard, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Phone, Mail, Clock, CreditCard } from 'lucide-react';
 
 const CTA = () => {
   return (
@@ -113,7 +112,7 @@ const CTA = () => {
               <Mail className="w-8 h-8 text-white" />
             </div>
             <h4 className="text-lg font-semibold text-white mb-2">Email Us</h4>
-            <p className="text-green-100">info@gcdc.ae</p>
+            <p className="text-green-100">info@ NDAid.ae</p>
             <p className="text-green-200 text-sm">Quick response guaranteed</p>
           </div>
 

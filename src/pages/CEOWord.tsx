@@ -1,5 +1,4 @@
-import React from 'react';
-import { User, Quote } from 'lucide-react';
+import { Quote, User } from 'lucide-react';
 
 const CEOWord = () => {
   return (
@@ -35,7 +34,7 @@ const CEOWord = () => {
               <div className="mt-8">
                 <h3 className="text-2xl font-bold text-gray-900">Alex Abassi</h3>
                 <p className="text-green-600 font-semibold">Chief Executive Officer</p>
-                <p className="text-gray-600 mt-2">Global Carers & Disability Cards</p>
+                <p className="text-gray-600 mt-2">National Disability Aid UAE</p>
               </div>
             </div>
 
@@ -44,19 +43,13 @@ const CEOWord = () => {
               <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-green-500">
                 <Quote className="w-8 h-8 text-green-500 mb-4" />
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  "Many people live with invisible disabilities conditions like chronic pain, mental health challenges, and neurological disorders that aren't immediately noticeable but significantly affect everyday life. Despite being hidden, these disabilities are just as impactful and deserving of support as any visible condition. Those who face these challenges often deal with ongoing physical, emotional, and mental strain while receiving little recognition or understanding in public settings, workplaces, or when accessing services."
+                  "Many people live with invisible disabilities conditions like chronic pain, mental health challenges, and neurological disorders that aren’t immediately noticeable but significantly affect everyday life. Despite being hidden, these disabilities are just as impactful and deserving of support as any visible condition. Those who face these challenges often deal with ongoing physical, emotional, and mental strain while receiving little recognition or understanding in public settings, workplaces, or when accessing services."
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
                   "There is a growing need for an official card that acknowledges and validates these invisible disabilities. This type of identification can help ensure that individuals are treated with the same level of care, accommodation, and respect as those with visible impairments. It can also promote greater awareness and bridge the gap in support systems, encouraging a more inclusive and empathetic society."
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  "This is the driving force behind my commitment to launching the Disability and Carer Card initiative."
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  "In addition, we are proud to introduce the Customer Support Card, recognizing the often overlooked efforts of those working on the front lines of customer service. These individuals serve as the bridge between organisations and the public, managing complex situations with patience, empathy, and professionalism. They too deserve acknowledgment, respect, and the resources to thrive in their roles."
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  "This project is rooted in dignity, inclusion, and gratitude for the disabled, the carers, and the support workers who make everyday life more humane for us all."
+                  "This is the driving force behind my commitment to launching the National Disability Aid Card and Carer Card initiative."
                 </p>
               </div>
             </div>
@@ -74,10 +67,11 @@ const CEOWord = () => {
                 <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
                   <User className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 ml-4">Our Vision</h3>
+                <h3 className="text-2xl font-bold text-gray-900 ml-4">Our Mission & Purpose</h3>
               </div>
               <p className="text-gray-700 leading-relaxed">
-                Our mission is to provide individuals with disabilities, as well as the carers who selflessly support them, with the recognition and services they deserve.
+              Our mission is to provide individuals with disabilities, as well as the carers who selflessly support them, with the recognition and services they deserve.
+              These cards offer a simple but powerful way to identify their needs and ensure access, respect, and understanding in public spaces and services.
               </p>
             </div>
 
@@ -87,10 +81,10 @@ const CEOWord = () => {
                 <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
                   <Quote className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 ml-4">Our Mission</h3>
+                <h3 className="text-2xl font-bold text-gray-900 ml-4">Our Commitment to Inclusion</h3>
               </div>
               <p className="text-gray-700 leading-relaxed">
-                This initiative aims to ensure that those with special needs receive the respect, assistance, and opportunities they need to thrive, and that carers are acknowledged for their vital role in this journey.
+              This initiative aims to ensure that those with special needs receive the respect, assistance, and opportunities they need to thrive, and that carers are acknowledged for their vital role in this journey.
               </p>
             </div>
           </div>
@@ -101,22 +95,16 @@ const CEOWord = () => {
       <div className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Our Leadership Commitment</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Honoring Frontline Support Workers</h3>
             <div className="space-y-6 text-gray-700">
               <p className="text-lg leading-relaxed">
-                "As CEO, I am personally committed to ensuring that GCDC remains at the forefront of disability support 
-                services and advocacy in the UAE. We continuously invest in technology, staff training, and strategic 
-                partnerships to enhance the experience and expand the benefits available to our cardholders."
+                "In addition, we are proud to introduce the <strong>Customer Support Card</strong>, recognizing the often-overlooked efforts of those working on the front lines of customer service."
               </p>
               <p className="text-lg leading-relaxed">
-                "Our dedicated team works tirelessly to identify new partnership opportunities, develop innovative support 
-                services, and advocate for policy changes that benefit our community. We believe in transparency, 
-                accountability, and measurable impact in all our endeavors."
+                "These individuals serve as the bridge between organisations and the public, managing complex situations with patience, empathy, and professionalism."
               </p>
               <p className="text-lg leading-relaxed">
-                "I invite you to join us in this vital mission. Whether you are seeking support for yourself or a loved one, 
-                or you represent an organization that shares our values of inclusion and social responsibility, together we 
-                can build a more accessible and inclusive UAE for all."
+                "They too deserve acknowledgment, respect, and the resources to thrive in their roles. This service is rooted in dignity, inclusion, and gratitude for the disabled, the carers, and the support workers who make everyday life more humane for us all."
               </p>
             </div>
           </div>

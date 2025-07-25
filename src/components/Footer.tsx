@@ -1,6 +1,5 @@
-import React from 'react';
+import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { CreditCard, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -118,7 +117,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-uae-green" />
-                <span className="text-gray-300 text-sm">info@gcdc.ae</span>
+                <span className="text-gray-300 text-sm">info@ NDAid.ae</span>
               </div>
             </div>
           </div>

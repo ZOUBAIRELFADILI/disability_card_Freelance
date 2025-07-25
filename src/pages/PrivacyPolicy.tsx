@@ -1,5 +1,4 @@
-import React from 'react';
-import { Shield, Lock, Eye, FileText, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Eye, FileText, Lock, Shield } from 'lucide-react';
 
 const PrivacyPolicy = () => {
   return (
@@ -28,9 +27,11 @@ const PrivacyPolicy = () => {
               <h2 className="text-2xl font-bold text-gray-900">Privacy Commitment</h2>
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Global Carers & Disability Cards (GCDC) is committed to protecting your privacy and ensuring the security 
-              of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard 
-              your information when you use our services and apply for our disability cards.
+            This privacy policy sets out how <strong>National Disability Aid Cards</strong> uses and protects any information that you give <strong>NDAid’s</strong> when you use this website.
+            <strong>National Disability Aid Cards</strong> is committed to ensure that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, then you can be assured that it will only be used in accordance with this privacy statement.
+            To safeguard your personal data, all electronic storage and transmission of personal data is secured with appropriate security technologies.
+            If you are only browsing this website, we do not capture data that allows us to identify you individually.
+
             </p>
             <p className="text-gray-700 leading-relaxed">
               <strong>Last Updated:</strong> January 2025 | <strong>Effective Date:</strong> January 1, 2025
@@ -42,61 +43,23 @@ const PrivacyPolicy = () => {
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                 <Eye className="w-6 h-6 text-green-500 mr-3" />
-                1. Information We Collect
+                1. Data Collected from Applicant and Sponsor Forms
               </h3>
               
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Personal Information</h4>
+                  
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                  When you complete the Applicant Information or Sponsor Newsletter Sign-Up forms, we may collect the following personal data:
+                  </p>
                   <ul className="space-y-2 text-gray-700 ml-4">
-                    <li>• Full name, date of birth, and contact details</li>
-                    <li>• Emirates ID number and passport information</li>
-                    <li>• Address and residential information</li>
-                    <li>• Emergency contact details</li>
-                    <li>• Photograph for card production and identification</li>
-                    <li>• Employment and educational information (when relevant)</li>
+                    <li>• Full name</li>
+                    <li>• Contact details, including email address</li>
+                    <li>• Additional information relevant to your application or newsletter subscription</li>
                   </ul>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Medical Information (Disabilities Card)</h4>
-                  <ul className="space-y-2 text-gray-700 ml-4">
-                    <li>• Medical reports and professional diagnoses</li>
-                    <li>• Disability type, severity, and functional impact</li>
-                    <li>• Healthcare provider information and recommendations</li>
-                    <li>• Treatment history and ongoing medical needs</li>
-                    <li>• Assistive technology and equipment requirements</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Caregiving Information (Carers Card)</h4>
-                  <ul className="space-y-2 text-gray-700 ml-4">
-                    <li>• Relationship to person being cared for</li>
-                    <li>• Caregiving responsibilities and duration</li>
-                    <li>• Supporting documentation and references</li>
-                    <li>• Training and certification records</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Support Needs (Customer Support Card)</h4>
-                  <ul className="space-y-2 text-gray-700 ml-4">
-                    <li>• Type and level of support required</li>
-                    <li>• Current challenges and assistance needs</li>
-                    <li>• Professional assessments and recommendations</li>
-                    <li>• Support service preferences and requirements</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Technical Information</h4>
-                  <ul className="space-y-2 text-gray-700 ml-4">
-                    <li>• Website usage data and analytics</li>
-                    <li>• IP address and device information</li>
-                    <li>• Application and system access logs</li>
-                    <li>• Communication preferences and history</li>
-                  </ul>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                  This information is collected solely for the purpose of processing your application or managing your subscription preferences.
+                  </p>
                 </div>
               </div>
             </div>
@@ -105,31 +68,26 @@ const PrivacyPolicy = () => {
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                 <FileText className="w-6 h-6 text-green-500 mr-3" />
-                2. How We Use Your Information
+                2.What We Do with the Information We Gather
               </h3>
               
               <div className="space-y-4 text-gray-700">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Primary Uses:</h4>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                  We are committed to ensure that your information is secure. In order to prevent unauthorised access or disclosure, we have put in place suitable physical, electronic and managerial procedures to safeguard and secure the information we collect online.
+                  </p>
                   <ul className="space-y-2 ml-4">
-                    <li>• Processing card applications and renewals</li>
-                    <li>• Verifying eligibility and identity</li>
-                    <li>• Producing and issuing cards with security features</li>
-                    <li>• Providing customer support and assistance services</li>
-                    <li>• Facilitating partner benefits and discounts</li>
-                    <li>• Coordinating support services and referrals</li>
+                    <li>• To process applications and manage participation in relevant Service</li>
+                    <li>• To send periodic newsletters or updates to sponsors and subscribers</li>
+                    <li>• To improve our services, website content, and user experience</li>
+                    <li>• To contact you for administrative or informational purposes related to your inquiry or submission</li>
+                    <li>• To maintain internal records for compliance, auditing, and reporting</li>
+                    <li>• To personalize content and communication based on your preferences</li>
+                    <li>•	To ensure security and prevent fraud or misuse of our services</li>
                   </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Secondary Uses:</h4>
-                  <ul className="space-y-2 ml-4">
-                    <li>• Improving our services and user experience</li>
-                    <li>• Conducting research and analytics (anonymized data)</li>
-                    <li>• Communicating service updates and important notices</li>
-                    <li>• Compliance with legal and regulatory requirements</li>
-                    <li>• Developing new services and partnerships</li>
-                  </ul>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                  We are committed to ensuring that your information is secure. Appropriate physical, electronic, and managerial procedures are in place to safeguard and protect the information we collect online.
+                  </p>
                 </div>
               </div>
             </div>
@@ -138,19 +96,14 @@ const PrivacyPolicy = () => {
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                 <Lock className="w-6 h-6 text-green-500 mr-3" />
-                3. Information Sharing and Disclosure
+                3. Data Security and Protection
               </h3>
               
               <div className="space-y-4 text-gray-700">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">We may share your information with:</h4>
-                  <ul className="space-y-2 ml-4">
-                    <li>• <strong>Partner Organizations:</strong> Limited information necessary to verify eligibility and provide benefits</li>
-                    <li>• <strong>Healthcare Providers:</strong> When required for medical verification (with explicit consent)</li>
-                    <li>• <strong>Government Agencies:</strong> As required by UAE law, regulation, or court order</li>
-                    <li>• <strong>Service Providers:</strong> Third-party vendors who assist in our operations under strict confidentiality agreements</li>
-                    <li>• <strong>Emergency Contacts:</strong> In case of emergencies or when necessary for cardholder safety</li>
-                  </ul>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                We are committed to ensure that your information is secure. In order to prevent unauthorised access or disclosure, we have put in place suitable physical, electronic and managerial procedures to safeguard and secure the information we collect online.
+                  </p>
                 </div>
 
                 <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
@@ -169,133 +122,37 @@ const PrivacyPolicy = () => {
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                 <Shield className="w-6 h-6 text-green-500 mr-3" />
-                4. Data Security and Protection
+                4. How we use cookies
               </h3>
               
               <div className="space-y-4 text-gray-700">
-                <p>We implement comprehensive security measures to protect your information:</p>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Technical Safeguards:</h4>
-                    <ul className="space-y-1 ml-4">
-                      <li>• SSL encryption for all data transmission</li>
-                      <li>• Secure database storage with advanced encryption</li>
-                      <li>• Regular security audits and vulnerability assessments</li>
-                      <li>• Multi-factor authentication systems</li>
-                      <li>• Firewall protection and intrusion detection</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Administrative Safeguards:</h4>
-                    <ul className="space-y-1 ml-4">
-                      <li>• Limited access on strict need-to-know basis</li>
-                      <li>• Comprehensive staff training on privacy protection</li>
-                      <li>• Confidentiality agreements with all personnel</li>
-                      <li>• Regular privacy compliance reviews and audits</li>
-                      <li>• Incident response and breach notification procedures</li>
-                    </ul>
-                  </div>
-                </div>
+                <p>A cookie is a small file which asks permission to be placed on your computer’s hard drive. Once you agree, the file is added and the cookie helps analyse web traffic or lets you know when you visit a particular site. Cookies allow web applications to respond to you as an individual. The web application can tailor its operations to your needs, likes and dislikes by gathering and remembering information about your preferences.</p>
+                <p>We use traffic log cookies to identify which pages are being used. This helps us analyse data about web page traffic and improve our website in order to tailor it to customer needs. We only use this information for statistical analysis purposes and then the data is removed from the system.</p>
+                <p>Overall, cookies help us provide you with a better website, by enabling us to monitor which pages you find useful and which you do not. A cookie in no way gives us access to your computer or any information about you, other than the data you choose to share with us.</p>
+                <p>You can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. This may prevent you from taking full advantage of the website.</p>
               </div>
             </div>
 
             {/* Your Rights */}
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">5. Your Privacy Rights</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">5. Links to other websites</h3>
               
               <div className="space-y-4 text-gray-700">
-                <p>Under UAE data protection laws and our commitment to transparency, you have the right to:</p>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span><strong>Access:</strong> Request copies of your personal information we hold</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span><strong>Correction:</strong> Request correction of inaccurate or incomplete information</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span><strong>Deletion:</strong> Request deletion of your information (subject to legal requirements)</span>
-                    </li>
-                  </ul>
-                  
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span><strong>Portability:</strong> Request transfer of your data in a structured format</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span><strong>Objection:</strong> Object to certain processing activities</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span><strong>Complaint:</strong> File complaints with relevant data protection authorities</span>
-                    </li>
-                  </ul>
-                </div>
+                <p>Our website may contain links to other websites of interest. However, once you have used these links to leave our site, you should note that we do not have any control over that other website. Therefore, we cannot be responsible for the protection and privacy of any information which you provide whilst visiting such sites and such sites are not governed by this privacy statement. You should exercise caution and look at the privacy statement applicable to the website in question.</p>
               </div>
             </div>
 
             {/* Data Retention */}
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">6. Data Retention</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">6. Controlling your personal information</h3>
               
               <div className="space-y-4 text-gray-700">
-                <p>We retain your information for the following periods:</p>
-                
-                <ul className="space-y-2 ml-4">
-                  <li>• <strong>Active cardholders:</strong> Throughout the validity period of your card plus 1 year</li>
-                  <li>• <strong>Expired cards:</strong> 7 years after expiration for legal compliance and audit purposes</li>
-                  <li>• <strong>Medical records:</strong> As required by UAE healthcare regulations (minimum 10 years)</li>
-                  <li>• <strong>Application records:</strong> 5 years after application decision for appeals and verification</li>
-                  <li>• <strong>Website and communication data:</strong> As specified in our cookie policy (typically 2 years)</li>
-                  <li>• <strong>Financial records:</strong> 7 years as required by UAE financial regulations</li>
-                </ul>
+                <p>We will not sell, distribute or lease your personal information to third parties unless we have your permission or are required by law to do so.</p>
+                <p>If you have previously agreed to us using your personal information for direct marketing purposes, you may change your mind at any time by writing to or emailing us at support@ndaid.help</p>
+                <p>If you believe that any information we are holding on you is incorrect or incomplete, please write to or email us as soon as possible, at the above address. We will promptly correct any information found to be incorrect.</p>
               </div>
             </div>
 
-            {/* Cookies and Tracking */}
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">7. Cookies and Online Tracking</h3>
-              
-              <div className="space-y-4 text-gray-700">
-                <p>Our website uses cookies and similar technologies to:</p>
-                <ul className="space-y-2 ml-4">
-                  <li>• Improve website functionality and user experience</li>
-                  <li>• Remember your preferences and settings</li>
-                  <li>• Analyze website traffic and usage patterns</li>
-                  <li>• Provide personalized content and services</li>
-                  <li>• Ensure website security and prevent fraud</li>
-                </ul>
-                <p>You can control cookie settings through your browser preferences. However, disabling certain cookies may affect website functionality.</p>
-              </div>
-            </div>
-
-            {/* International Transfers */}
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">8. International Data Transfers</h3>
-              
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  Your personal information is primarily stored and processed within the UAE. In limited circumstances, 
-                  we may transfer data internationally for:
-                </p>
-                <ul className="space-y-2 ml-4">
-                  <li>• Technical support and system maintenance</li>
-                  <li>• International partner verification (with your consent)</li>
-                  <li>• Legal compliance in cross-border situations</li>
-                </ul>
-                <p>
-                  All international transfers are conducted with appropriate safeguards and in compliance with UAE data protection laws.
-                </p>
-              </div>
-            </div>
 
             {/* Contact Information */}
             <div className="bg-gradient-to-r from-green-100 to-green-50 rounded-2xl p-8 border-l-4 border-green-500">
@@ -304,32 +161,11 @@ const PrivacyPolicy = () => {
                 For any privacy-related questions, concerns, or to exercise your rights, please contact us:
               </p>
               <div className="space-y-2 text-gray-700">
-                <p><strong>Privacy Officer:</strong> support@gcdc.help</p>
+                <p><strong>Privacy Officer:</strong> support@ndaid.help</p>
                 <p><strong>Phone:</strong> +971 4 XXX XXXX (Privacy Hotline)</p>
-                <p><strong>Address:</strong> Privacy Department, GCDC, Dubai, UAE</p>
+                <p><strong>Address:</strong> Privacy Department,  NDAid, Dubai, UAE</p>
                 <p><strong>Response Time:</strong> We will respond to privacy requests within 30 days</p>
                 <p><strong>Emergency Contact:</strong> Available 24/7 for urgent privacy concerns</p>
-              </div>
-            </div>
-
-            {/* Updates to Policy */}
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">9. Updates to This Policy</h3>
-              <div className="text-gray-700 space-y-4">
-                <p>
-                  We may update this Privacy Policy periodically to reflect changes in our practices, technology, 
-                  legal requirements, or other factors. We will notify you of significant changes through:
-                </p>
-                <ul className="space-y-2 ml-4">
-                  <li>• Email notifications to registered users</li>
-                  <li>• Prominent notices on our website</li>
-                  <li>• SMS alerts for important changes affecting your rights</li>
-                  <li>• Direct mail for substantial policy modifications</li>
-                </ul>
-                <p>
-                  Continued use of our services after policy updates constitutes acceptance of the revised terms. 
-                  If you disagree with changes, please contact us to discuss your options.
-                </p>
               </div>
             </div>
           </div>

@@ -1,13 +1,12 @@
-import React from 'react';
+import { ArrowRight, Award, CheckCircle, DollarSign, Globe, Target, TrendingUp, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Globe, TrendingUp, Users, Award, ArrowRight, CheckCircle, DollarSign, Target } from 'lucide-react';
 
 const BecomeFranchise = () => {
   const benefits = [
     {
       icon: Globe,
       title: "Global Expansion",
-      description: "Be part of expanding GCDC services worldwide with proven business model"
+      description: "Be part of expanding  NDAid services worldwide with proven business model"
     },
     {
       icon: TrendingUp,
@@ -30,7 +29,7 @@ const BecomeFranchise = () => {
     "Passion for disability advocacy and community service",
     "Business experience or willingness to learn",
     "Financial capacity to invest in franchise operations",
-    "Commitment to GCDC values and service standards",
+    "Commitment to  NDAid values and service standards",
     "Local market knowledge and community connections",
     "Ability to meet franchise territory requirements"
   ];
@@ -84,7 +83,7 @@ const BecomeFranchise = () => {
               Become a Global Franchise Partner
             </h1>
             <p className="text-xl md:text-2xl text-green-100 mb-8 leading-relaxed">
-              Join our mission to expand Global Carers and Disability Cards (GCDC) services 
+              Join our mission to expand National Disability Aid Cards  ( NDAid) services 
               worldwide. Help us create inclusive communities while building a successful business.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -176,7 +175,7 @@ const BecomeFranchise = () => {
             </div>
             
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Why Choose GCDC Franchise?</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Why Choose  NDAid Franchise?</h3>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <CheckCircle className="w-6 h-6 text-uae-green mr-3 mt-0.5 flex-shrink-0" />
@@ -354,7 +353,7 @@ const BecomeFranchise = () => {
             Ready to Make a Difference?
           </h2>
           <p className="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
-            Join our global network of franchise partners and help us expand GCDC services 
+            Join our global network of franchise partners and help us expand  NDAid services 
             to communities worldwide. Together, we can create a more inclusive world.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
