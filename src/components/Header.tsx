@@ -1,6 +1,7 @@
 import { ChevronDown, Heart, Menu, Phone, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import GoogleTranslateWidget from './GoogleTranslateWidget';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -175,6 +176,11 @@ const Header = () => {
               ))}
             </nav>
 
+            {/* Google Translate Widget */}
+            <div className="hidden lg:block">
+              <GoogleTranslateWidget />
+            </div>
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -248,6 +254,13 @@ const Header = () => {
                 )}
               </div>
             ))}
+            
+            {/* Mobile Google Translate Widget */}
+            <div className="py-4 border-t border-gray-200">
+              <div className="px-4">
+                <GoogleTranslateWidget />
+              </div>
+            </div>
           </div>
         </div>
       </header>

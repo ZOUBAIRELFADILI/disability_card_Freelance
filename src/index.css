@@ -90,6 +90,111 @@
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* Google Translate Widget Customization */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+.goog-te-menu-value {
+  padding: 3px !important;
+}
+
+.goog-te-gadget-simple {
+  background-color: transparent !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-right: none !important;
+  font-size: 10pt !important;
+  display: none !important;
+}
+
+.goog-te-combo {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+  margin: 0 !important;
+}
+
+/* Hide Google Translate top banner */
+body {
+  top: 0 !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body.goog-te-hl {
+  top: 0 !important;
+}
+
+/* Custom animation for language dropdown */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out;
+}
+
+/* RTL Support for Arabic */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-3 > * + * {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .ml-3 {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .mr-3 {
+  margin-right: 0;
+  margin-left: 0.75rem;
+}
+
 /* Card 3D Effect */
 .card-3d {
   perspective: 1000px;
