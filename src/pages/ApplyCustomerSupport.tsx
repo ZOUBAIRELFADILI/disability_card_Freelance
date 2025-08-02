@@ -1,8 +1,9 @@
+import { ArrowRight, CheckCircle, Clock, Copy, DollarSign, Edit, FileText, Headphones, Phone, Shield, Upload, User, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CheckCircle, ArrowRight, FileText, Clock, Shield, Headphones, Upload, X, Edit, Phone, User, Copy, DollarSign } from 'lucide-react';
-import { applicationAPI } from '../api/applicationApi';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { applicationAPI } from '../api/applicationApi';
+import PaymentStep from '../components/PaymentStep';
 
 const ApplyCustomerSupport = () => {
   const navigate = useNavigate();
@@ -28,16 +29,24 @@ const ApplyCustomerSupport = () => {
     supportDescription: '',
     specialRequirements: '',
     emergencyContactName: '',
-    emergencyContactPhone: ''
+    emergencyContactPhone: '',
+    includeLanyard: false 
   });
 
   const [showPaymentStep, setShowPaymentStep] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentData, setPaymentData] = useState({
     paymentType: 'bank-transfer',
     firstName: '',
     lastName: '',
     phoneNumber: ''
   });
+
+  const baseAmount = 100;
+  const lanyardAmount = 20;
+  const totalAmount = React.useMemo(() => {
+    return baseAmount + (formData.includeLanyard ? lanyardAmount : 0);
+  }, [formData.includeLanyard]);
 
   const companyIBAN = 'GB82WEST12345698765432';
 
@@ -152,13 +161,24 @@ const ApplyCustomerSupport = () => {
       }
     }
     
-    // For now, just show success message
-    toast.success('Payment confirmation submitted successfully!');
-    setShowPaymentStep(false);
-    setShowSuccessNotification(true);
+    setIsSubmitting(true);
+    
+    try {
+      // For now, just show success message
+      toast.success('Payment confirmation submitted successfully!');
+      setShowPaymentStep(false);
+      setShowSuccessNotification(true);
+    } catch (error) {
+      console.error('Payment submission failed:', error);
+      toast.error('Payment submission failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const confirmSubmission = async () => {
+    setIsSubmitting(true);
+    
     try {
       const response = await applicationAPI.submitCustomerSupportApplication(formData);
       setShowConfirmationModal(false);
@@ -177,6 +197,8 @@ const ApplyCustomerSupport = () => {
     } catch (error) {
       console.error('Application submission failed:', error);
       alert('Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
   
@@ -193,7 +215,22 @@ const ApplyCustomerSupport = () => {
             <DollarSign className="w-8 h-8 text-green-600" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Complete Your Payment</h2>
-          <p className="text-gray-600">Application Fee: <span className="font-bold text-green-600">AED 100</span></p>
+          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-gray-600">Customer Support Card Application:</span>
+              <span className="font-semibold">AED {baseAmount}</span>
+            </div>
+            {formData.includeLanyard && (
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-600">Verified Global Support Lanyard:</span>
+                <span className="font-semibold">AED {lanyardAmount}</span>
+              </div>
+            )}
+            <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+              <span className="text-gray-900 font-semibold">Total Amount:</span>
+              <span className="text-green-600 font-bold text-lg">AED {totalAmount}</span>
+            </div>
+          </div>
         </div>
 
         {/* Company IBAN */}
@@ -232,7 +269,7 @@ const ApplyCustomerSupport = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
               <input
                 type="text"
-                value="AED 100"
+                value={`AED ${totalAmount}`}
                 readOnly
                 className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg font-semibold"
               />
@@ -498,6 +535,29 @@ const ApplyCustomerSupport = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-gray-800"
               />
             </div>
+            {/* Lanyard Option */}
+            <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Additional Services</h4>
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  name="includeLanyard"
+                  id="includeLanyard"
+                  checked={formData.includeLanyard}
+                  onChange={(e) => setFormData({ ...formData, includeLanyard: e.target.checked })}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
+                />
+                <div className="flex-1">
+                  <label htmlFor="includeLanyard" className="text-sm font-medium text-gray-700 cursor-pointer">
+                    Include Verified Global Support Lanyard (+AED 20)
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Add a discreet, globally recognized lanyard for easier identification in customer support queues.
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         );
 
@@ -722,6 +782,19 @@ const ApplyCustomerSupport = () => {
             </div>
           </div>
         );
+        case 6:
+          return (
+            <PaymentStep
+              amount={totalAmount}
+              cardType="Customer Support Card"
+              paymentData={paymentData}
+              onPaymentDataChange={handlePaymentInputChange}
+              onSubmit={handlePaymentSubmit}
+              isSubmitting={isSubmitting}
+              includeLanyard={formData.includeLanyard}
+            />
+          );
+
 
       default:
         return null;
@@ -975,6 +1048,14 @@ const ApplyCustomerSupport = () => {
               <p className="text-sm text-gray-700">
                 <strong>Application ID:</strong> #{applicationId}
               </p>
+              <p className="text-sm text-gray-700">
+                <strong>Total Amount:</strong> AED {totalAmount}
+              </p>
+              {formData.includeLanyard && (
+                <p className="text-sm text-gray-700">
+                  <strong>Includes:</strong> Verified Global Support Lanyard
+                </p>
+              )}
             </div>
             <button
               onClick={() => navigate('/')}
