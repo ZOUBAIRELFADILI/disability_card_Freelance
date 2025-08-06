@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5253/api';
+const API_BASE_URL = 'https://api.ndaid.help/api';
 
 export interface DisabilityApplicationRequest {
   firstName: string;
@@ -16,6 +16,7 @@ export interface DisabilityApplicationRequest {
   disabilityDescription: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
+  includeLanyard: boolean;
   medicalDocuments?: File[];
   profilePicture?: File;
 }
@@ -37,6 +38,7 @@ export interface CarersApplicationRequest {
   caregivingExperience: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
+  includeLanyard: boolean;
   supportingDocuments?: File[];
   profilePicture?: File;
 }
@@ -58,6 +60,7 @@ export interface CustomerSupportApplicationRequest {
   specialRequirements: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
+  includeLanyard: boolean;
   profilePicture?: File;
 }
 
@@ -122,6 +125,7 @@ class ApplicationAPI {
       disabilityDescription: application.disabilityDescription,
       emergencyContactName: application.emergencyContactName,
       emergencyContactPhone: application.emergencyContactPhone,
+      includeLanyard: application.includeLanyard,
     };
 
     const response = await this.makeRequest<ApplicationResponse>('/DisabilityApplication', {
@@ -134,6 +138,11 @@ class ApplicationAPI {
       for (const file of application.medicalDocuments) {
         await this.uploadMedicalDocument(response.id, file);
       }
+    }
+
+    // If profile picture is provided, upload it separately
+    if (application.profilePicture) {
+      await this.uploadProfilePicture(response.id, application.profilePicture);
     }
 
     return response;
@@ -151,6 +160,51 @@ class ApplicationAPI {
     if (!response.ok) {
       const error = await response.text();
       throw new Error(error || 'File upload failed');
+    }
+  }
+
+  async uploadProfilePicture(applicationId: number, file: File): Promise<void> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_BASE_URL}/DisabilityApplication/${applicationId}/profile-picture`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || 'Profile picture upload failed');
+    }
+  }
+
+  async uploadCarersProfilePicture(applicationId: number, file: File): Promise<void> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_BASE_URL}/CarersApplication/${applicationId}/profile-picture`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || 'Profile picture upload failed');
+    }
+  }
+
+  async uploadCustomerSupportProfilePicture(applicationId: number, file: File): Promise<void> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_BASE_URL}/CustomerSupportApplication/${applicationId}/profile-picture`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || 'Profile picture upload failed');
     }
   }
 
@@ -181,12 +235,25 @@ class ApplicationAPI {
       emergencyContactName: application.emergencyContactName,
       emergencyContactPhone: application.emergencyContactPhone,
       supportingDocuments: supportingDocumentNames,
+      includeLanyard: application.includeLanyard,
     };
 
-    return this.makeRequest<ApplicationResponse>('/CarersApplication', {
+    const response = await this.makeRequest<ApplicationResponse>('/CarersApplication', {
       method: 'POST',
       body: JSON.stringify(applicationData),
     });
+
+    // Upload profile picture if provided
+    if (application.profilePicture) {
+      try {
+        await this.uploadCarersProfilePicture(response.id, application.profilePicture);
+      } catch (error) {
+        console.warn('Failed to upload profile picture:', error);
+        // Application was created successfully, profile picture upload is optional
+      }
+    }
+
+    return response;
   }
 
   async uploadCarersSupportingDocuments(files: File[]): Promise<string[]> {
@@ -209,7 +276,7 @@ class ApplicationAPI {
   }
 
   async submitCustomerSupportApplication(application: CustomerSupportApplicationRequest): Promise<ApplicationResponse> {
-    // Submit the application data as JSON (profile pictures are not handled in the current backend)
+    // Submit the application data as JSON
     const applicationData = {
       firstName: application.firstName,
       lastName: application.lastName,
@@ -227,12 +294,25 @@ class ApplicationAPI {
       specialRequirements: application.specialRequirements,
       emergencyContactName: application.emergencyContactName,
       emergencyContactPhone: application.emergencyContactPhone,
+      includeLanyard: application.includeLanyard,
     };
 
-    return this.makeRequest<ApplicationResponse>('/CustomerSupportApplication', {
+    const response = await this.makeRequest<ApplicationResponse>('/CustomerSupportApplication', {
       method: 'POST',
       body: JSON.stringify(applicationData),
     });
+
+    // Upload profile picture if provided
+    if (application.profilePicture) {
+      try {
+        await this.uploadCustomerSupportProfilePicture(response.id, application.profilePicture);
+      } catch (error) {
+        console.warn('Failed to upload profile picture:', error);
+        // Application was created successfully, profile picture upload is optional
+      }
+    }
+
+    return response;
   }
 }
 

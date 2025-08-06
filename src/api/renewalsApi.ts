@@ -1,5 +1,5 @@
 // API functions for renewal applications
-const BASE_URL = 'http://localhost:5253/api';
+const BASE_URL = 'https://api.ndaid.help/api';
 
 export interface RenewalApplication {
   id: number;

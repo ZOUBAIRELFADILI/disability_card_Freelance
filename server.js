@@ -7,7 +7,7 @@ const stripe = new Stripe('');
 const app = express();
 
 app.use(cors({
-  origin: ['https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/', 'http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: ['https://api.ndaid.help/', 'http://localhost:5173', 'http://127.0.0.1:5173'],
   credentials: true
 }));
 app.use(express.json());
@@ -32,8 +32,8 @@ app.post('/create-checkout-session', async (req, res) => {
         },
       ],
       mode: 'payment',
-      success_url: `https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/payment?payment=cancelled`,
+      success_url: `https://api.ndaid.help/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://api.ndaid.help/payment?payment=cancelled`,
       metadata: {
         cardType: cardType,
         applicantName: `${applicationData?.firstName || ''} ${applicationData?.lastName || ''}`,

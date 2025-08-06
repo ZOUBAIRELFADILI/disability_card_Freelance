@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { 
-  Users, 
-  Heart, 
-  Headphones, 
-  BarChart3, 
-  Settings, 
-  ChevronLeft, 
-  ChevronRight,
-  HelpCircle,
+import {
+  Badge,
+  BarChart3,
   Building2,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CreditCard,
+  DollarSign,
+  FileText,
+  Headphones,
+  Heart,
+  HelpCircle,
   Mail,
   RefreshCw,
-  DollarSign,
-  Badge,
-  ChevronDown,
-  ChevronUp,
-  FileText,
-  CreditCard
+  Settings,
+  Users
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useNotifications } from '../contexts/NotificationContext';
 
 interface SidebarProps {
@@ -36,6 +36,11 @@ interface MenuItem {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
+  // Helper to sum notification counts for subItems
+  const getSubMenuTotal = (subItems?: MenuItem[]) => {
+    if (!subItems) return 0;
+    return subItems.reduce((sum, sub) => sum + getNotificationCount(sub.badge), 0);
+  };
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
   const { counts, markAsViewed } = useNotifications();
@@ -59,7 +64,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
 
   const getNotificationCount = (badge: string | null | undefined): number => {
     if (!badge || !counts) return 0;
-    return counts[badge as keyof typeof counts] || 0;
+    const value = counts[badge as keyof typeof counts] || 0;
+    return value;
   };
 
   const menuItems: MenuItem[] = [
@@ -130,8 +136,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
       ]
     },
     {
-      title: 'Tracking Cards',
+      title: 'Payments',
       icon: CreditCard,
+      path: '/admin/payments',
+      badge: 'payments'
+    },
+    {
+      title: 'Tracking Cards',
+      icon: Badge,
       path: '/admin/tracking-cards',
       badge: null
     },
@@ -218,7 +230,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
                   {!isCollapsed && (
                     <>
                       <span className="font-medium flex-1 text-left">{item.title}</span>
-                      {item.badge && getNotificationCount(item.badge) > 0 && (
+                      {/* Show sum of sub-menu notification badges for APPLY NOW and Renewals */}
+                      {['APPLY NOW', 'Renewals'].includes(item.title) && getSubMenuTotal(item.subItems) > 0 && (
+                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 mr-2">
+                          {getSubMenuTotal(item.subItems)}
+                        </span>
+                      )}
+                      {item.badge && getNotificationCount(item.badge) > 0 && !item.subItems && (
                         <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 mr-2">
                           {getNotificationCount(item.badge)}
                         </span>

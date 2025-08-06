@@ -151,7 +151,7 @@ const Settings: React.FC = () => {
             <div className="relative">
               {profile.profilePicture ? (
                 <img
-                  src={`https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/${profile.profilePicture}`}
+                  src={`https://api.ndaid.help/${profile.profilePicture}`}
                   alt="Profile"
                   className="w-20 h-20 rounded-full object-cover border-4 border-gray-200"
                 />

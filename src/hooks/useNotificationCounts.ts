@@ -44,7 +44,7 @@ const getStoredViewedApplications = (): ViewedApplications => {
       };
     }
   } catch (error) {
-    console.error('Error loading viewed applications from localStorage:', error);
+    // Removed logging
   }
   
   return {
@@ -76,7 +76,7 @@ const saveViewedApplications = (viewedApps: ViewedApplications) => {
     };
     localStorage.setItem('viewedApplications', JSON.stringify(toSave));
   } catch (error) {
-    console.error('Error saving viewed applications to localStorage:', error);
+    // Removed logging
   }
 };
 
@@ -107,7 +107,7 @@ export const useNotificationCounts = () => {
       setLoading(true);
       
       // Fetch counts from dashboard stats endpoint
-      const response = await fetch('http://localhost:5253/api/Admin/dashboard/stats', {
+      const response = await fetch('https://api.ndaid.help/api/Admin/dashboard/stats', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
           'Content-Type': 'application/json'
@@ -133,31 +133,26 @@ export const useNotificationCounts = () => {
         contact: data.newContactSubmissions || 0,
       };
 
-      // Apply permanent reductions from localStorage
+      // Apply permanent reductions ONLY for donations and contact
       const permanentReductions = JSON.parse(localStorage.getItem('permanentReductions') || '{}');
-      
-      // Apply viewed applications count reduction
       const adjustedCounts = { ...rawCounts };
-      Object.keys(adjustedCounts).forEach(key => {
+      ['donations', 'contact'].forEach(key => {
         const typedKey = key as keyof NotificationCounts;
-        // Apply permanent reductions
         if (permanentReductions[typedKey]) {
           adjustedCounts[typedKey] = Math.max(0, adjustedCounts[typedKey] - permanentReductions[typedKey]);
         }
       });
-
       setCounts(adjustedCounts);
     } catch (error) {
-      console.error('Error fetching notification counts:', error);
+      // Removed logging
     } finally {
       setLoading(false);
     }
   };
 
   const markAsViewed = (type: keyof NotificationCounts, applicationId: number) => {
-    // Handle special cases where we want to clear all counts for that type
+    // Only clear all for donations/contact if applicationId is 0
     if (['donations', 'contact'].includes(type) && applicationId === 0) {
-      // Clear all counts for this type by setting permanent reduction
       setPermanentReduction(type, counts[type]);
       setCounts(prev => ({
         ...prev,
@@ -165,18 +160,22 @@ export const useNotificationCounts = () => {
       }));
       return;
     }
-    
+    // For individual donations/contact, just mark as viewed, do not reduce all
     const newViewedApplications = { ...viewedApplications };
     newViewedApplications[type].add(applicationId);
     setViewedApplications(newViewedApplications);
     saveViewedApplications(newViewedApplications);
-    
-    // Add to permanent reductions for individual items
-    setPermanentReduction(type, 1);
-    setCounts(prev => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] - 1)
-    }));
+    // Only add permanent reduction for individual items if not donations/contact
+    if (!['donations', 'contact'].includes(type)) {
+      setPermanentReduction(type, 1);
+      setCounts(prev => {
+        const updated = {
+          ...prev,
+          [type]: Math.max(0, prev[type] - 1)
+        };
+        return updated;
+      });
+    }
   };
 
   const decrementCount = (key: keyof NotificationCounts) => {

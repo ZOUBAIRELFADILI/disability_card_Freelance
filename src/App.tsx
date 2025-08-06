@@ -37,6 +37,7 @@ import DisabilitiesPage from './admin/DisabilitiesPage';
 import CarersPage from './admin/CarersPage';
 import CustomerSupportPage from './admin/CustomerSupportPage';
 import VerifiedLanyardApplicationsPage from './admin/VerifiedLanyardApplicationsPage';
+import PaymentsPage from './admin/PaymentsPage';
 import DonationsPage from './admin/DonationsPage';
 import PartnersPage from './admin/PartnersPage';
 import ContactSubmissions from './admin/ContactSubmissions';
@@ -66,6 +67,7 @@ function App() {
                     <Route path="carers" element={<CarersPage />} />
                     <Route path="customer-support" element={<CustomerSupportPage />} />
                     <Route path="verified-lanyards" element={<VerifiedLanyardApplicationsPage />} />
+                    <Route path="payments" element={<PaymentsPage />} />
                     <Route path="donations" element={<DonationsPage />} />
                     <Route path="partners" element={<PartnersPage />} />
                     <Route path="renewals" element={<RenewalsPage />} />

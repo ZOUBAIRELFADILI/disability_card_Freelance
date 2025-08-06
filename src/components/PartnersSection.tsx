@@ -66,7 +66,7 @@ const PartnersSection = () => {
               <div className="h-32 bg-gray-100 overflow-hidden flex items-center justify-center">
                 {partner.logo ? (
                   <img
-                    src={partner.logo.startsWith('http') ? partner.logo : `https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/${partner.logo}`}
+                    src={partner.logo.startsWith('http') ? partner.logo : `https://api.ndaid.help/${partner.logo}`}
                     alt={partner.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, Eye, CheckCircle, XCircle, Clock, CreditCard } from 'lucide-react';
+import { CheckCircle, Clock, CreditCard, Download, Eye, Filter, Search, XCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { adminAPI, CustomerSupportApplication } from '../api/adminApi';
-import { useNotifications } from '../contexts/NotificationContext';
 import CreateOnlyCardModal from '../components/CreateOnlyCardModal';
+import { useNotifications } from '../contexts/NotificationContext';
 
 const CustomerSupportPage: React.FC = () => {
   const [applications, setApplications] = useState<CustomerSupportApplication[]>([]);
@@ -65,6 +65,31 @@ const CustomerSupportPage: React.FC = () => {
     // Optionally refresh applications or show success message
   };
 
+ const handleDirectDownload = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url, { 
+      method: 'GET',
+      credentials: 'include',
+      mode: 'cors' // ensure CORS is used
+    });
+    if (!response.ok) throw new Error('Network response was not ok');
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(link.href);
+      document.body.removeChild(link);
+    }, 100);
+  } catch (error) {
+    alert('Failed to download file.');
+    console.error(error);
+  }
+};
+
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
@@ -85,133 +110,160 @@ const CustomerSupportPage: React.FC = () => {
 
   const ApplicationModal = ({ application }: { application: CustomerSupportApplication }) => (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white/95 backdrop-blur-md rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Customer Support Application Details</h2>
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20">
+        <div className="sticky top-0 bg-gradient-to-r from-purple-50 to-white border-b px-8 py-5 flex justify-between items-center rounded-t-2xl">
+          <h2 className="text-2xl font-bold text-purple-800 tracking-tight flex items-center gap-2">
+            <CreditCard className="w-6 h-6 text-purple-600" /> Customer Support Application Details
+          </h2>
           <button
             onClick={() => setShowModal(false)}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-400 hover:text-red-500 transition-colors text-2xl font-bold"
+            aria-label="Close"
           >
-            ✕
+            ×
           </button>
         </div>
-        
-        <div className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Personal Information */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Full Name</label>
-                    <p className="text-gray-900">{`${application.firstName} ${application.lastName}`}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                    <p className="text-gray-900">{new Date(application.dateOfBirth).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Gender</label>
-                    <p className="text-gray-900">{application.gender}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Nationality</label>
-                    <p className="text-gray-900">{application.nationality}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
-                    <p className="text-gray-900">{application.email}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <p className="text-gray-900">{application.phoneNumber}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Emirates ID</label>
-                    <p className="text-gray-900">{application.emiratesId}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Address</label>
-                    <p className="text-gray-900">{application.address}</p>
-                    <p className="text-gray-600 text-sm">{application.city}, {application.emirate}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Support Information */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Support Information</h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Support Type</label>
-                    <p className="text-gray-900">{application.supportType}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Support Description</label>
-                    <p className="text-gray-900">{application.supportDescription}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Special Requirements</label>
-                    <p className="text-gray-900">{application.specialRequirements || 'None specified'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Emergency Contact</label>
-                    <p className="text-gray-900">{application.emergencyContactName}</p>
-                    <p className="text-gray-600 text-sm">{application.emergencyContactPhone}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Application Status */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Application Status</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-2 ${getStatusColor(application.applicationStatus)}`}>
-                      {getStatusIcon(application.applicationStatus)}
-                      <span>{application.applicationStatus}</span>
+        <div className="p-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Left: Profile Image, Application Status, Customer Support Card Info */}
+            <div className="space-y-8">
+              {/* Profile Image with Download */}
+              <div className="flex flex-col items-center bg-gray-50 rounded-xl p-6 shadow-sm border">
+                {application.profilePicture ? (
+                  <img
+                    src={application.profilePicture}
+                    alt={`${application.firstName} ${application.lastName}`}
+                    className="h-32 w-32 rounded-full object-cover border-4 border-purple-200 shadow mb-3"
+                  />
+                ) : (
+                  <div className="h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center mb-3">
+                    <span className="text-2xl font-medium text-gray-600">
+                      {application.firstName[0]}{application.lastName[0]}
                     </span>
                   </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Applied Date</label>
-                    <p className="text-gray-900">{new Date(application.createdAt).toLocaleDateString()}</p>
-                  </div>
+                )}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-base text-gray-700 font-semibold">Profile Image</span>
+                  {typeof application.profilePicture === 'string' && application.profilePicture && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleDirectDownload(
+                          (application.profilePicture || '').replace('Localhost', 'localhost'),
+                          `Profile_${application.firstName}_${application.lastName}.jpg`
+                        )
+                      }
+                      className="hover:bg-purple-100 p-2 rounded-full transition"
+                      title="Download Profile Image"
+                    >
+                      <Download className="w-5 h-5 text-purple-700" />
+                    </button>
 
-                  {application.applicationStatus.toLowerCase() === 'pending' && (
-                    <div className="space-y-3 pt-4 border-t">
-                      <p className="text-sm font-medium text-gray-700">Update Status:</p>
-                      <div className="flex space-x-3">
-                        <button
-                          onClick={() => handleStatusUpdate(application.id, 'approved')}
-                          className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleStatusUpdate(application.id, 'rejected')}
-                          className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          <XCircle className="w-4 h-4 mr-2" />
-                          Reject
-                        </button>
-                      </div>
-                    </div>
                   )}
                 </div>
               </div>
-
-              {/* Additional Information */}
+              {/* Application Status */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border space-y-3">
+                <h3 className="text-lg font-semibold mb-4 text-purple-800">Application Status</h3>
+                <div className="flex items-center space-x-3 mb-2">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-2 ${getStatusColor(application.applicationStatus)}`}>
+                    {getStatusIcon(application.applicationStatus)}
+                    <span>{application.applicationStatus}</span>
+                  </span>
+                  <span className="text-xs text-gray-500">Applied: {new Date(application.createdAt).toLocaleDateString()}</span>
+                </div>
+                {application.applicationStatus.toLowerCase() === 'pending' && (
+                  <div className="space-y-3 pt-2 border-t">
+                    <p className="text-xs font-medium text-gray-700">Update Status:</p>
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={() => handleStatusUpdate(application.id, 'approved')}
+                        className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm"
+                      >
+                        <CheckCircle className="w-4 h-4 mr-2" /> Approve
+                      </button>
+                      <button
+                        onClick={() => handleStatusUpdate(application.id, 'rejected')}
+                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
+                      >
+                        <XCircle className="w-4 h-4 mr-2" /> Reject
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* Customer Support Card Info */}
               <div className="bg-purple-50 rounded-lg p-4">
                 <h4 className="font-medium text-purple-900 mb-2">Customer Support Card</h4>
                 <p className="text-sm text-purple-700">
                   This application is for a Customer Support identification card that allows the holder to 
                   receive priority assistance and support services across UAE facilities.
                 </p>
+              </div>
+            </div>
+            {/* Right: Application Info */}
+            <div className="space-y-8">
+              {/* Personal Information */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border space-y-3">
+                <h3 className="text-lg font-semibold mb-4 text-purple-800">Personal Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Full Name</label>
+                    <p className="text-gray-900 font-semibold">{`${application.firstName} ${application.lastName}`}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Date of Birth</label>
+                    <p className="text-gray-900">{new Date(application.dateOfBirth).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Gender</label>
+                    <p className="text-gray-900">{application.gender}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Nationality</label>
+                    <p className="text-gray-900">{application.nationality}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Email</label>
+                    <p className="text-gray-900">{application.email}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Phone Number</label>
+                    <p className="text-gray-900">{application.phoneNumber}</p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-gray-500">Address</label>
+                    <p className="text-gray-900">{application.address}</p>
+                    <p className="text-gray-600 text-xs">{application.city}, {application.emirate}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Emirates ID</label>
+                    <p className="text-gray-900">{application.emiratesId}</p>
+                  </div>
+                </div>
+              </div>
+              {/* Support Information */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border space-y-3">
+                <h3 className="text-lg font-semibold mb-4 text-purple-800">Support Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Support Type</label>
+                    <p className="text-gray-900">{application.supportType}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Support Description</label>
+                    <p className="text-gray-900">{application.supportDescription}</p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-gray-500">Special Requirements</label>
+                    <p className="text-gray-900">{application.specialRequirements || 'None specified'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Emergency Contact</label>
+                    <p className="text-gray-900">{application.emergencyContactName}</p>
+                    <p className="text-gray-600 text-xs">{application.emergencyContactPhone}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -282,6 +334,9 @@ const CustomerSupportPage: React.FC = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Profile
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Applicant
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -289,6 +344,9 @@ const CustomerSupportPage: React.FC = () => {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Location
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Lanyard Included
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
@@ -305,6 +363,23 @@ const CustomerSupportPage: React.FC = () => {
                 {filteredApplications.map((app) => (
                   <tr key={app.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center justify-center">
+                        {app.profilePicture ? (
+                          <img
+                            src={app.profilePicture}
+                            alt={`${app.firstName} ${app.lastName}`}
+                            className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
+                          />
+                        ) : (
+                          <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-sm font-medium text-gray-600">
+                              {app.firstName[0]}{app.lastName[0]}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">{`${app.firstName} ${app.lastName}`}</div>
                         <div className="text-sm text-gray-500">{app.email}</div>
@@ -317,6 +392,15 @@ const CustomerSupportPage: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{app.city}</div>
                       <div className="text-sm text-gray-500">{app.emirate}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        app.includeLanyard 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {app.includeLanyard ? 'Yes' : 'No'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(app.applicationStatus)}`}>
@@ -400,7 +484,8 @@ const CustomerSupportPage: React.FC = () => {
             firstName: selectedApplicationForCard.firstName,
             lastName: selectedApplicationForCard.lastName,
             cardType: 'customer_support',
-            applicationType: 'customer_support'
+            applicationType: 'customer_support',
+            profilePicture: selectedApplicationForCard.profilePicture
           }}
         />
       )}

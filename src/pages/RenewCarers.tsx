@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle, Clock, Heart, RefreshCw, Shield } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { trackCard } from '../api/cardApi';
 
 const RenewCarers = () => {
@@ -20,6 +20,7 @@ const RenewCarers = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const validationTimeoutRef = useRef<number | null>(null);
   const [cardValidation, setCardValidation] = useState({
     isValid: false,
     isChecking: false,
@@ -46,7 +47,11 @@ const RenewCarers = () => {
       const result = await trackCard(cardNumber);
       
       if (result.found && result.card) {
-        if (result.card.cardType !== 'carers') {
+        // Normalize card type comparison to handle different formats
+        const cardType = result.card.cardType.toLowerCase();
+        const isCarersCard = cardType.includes('carer') || cardType.includes('care');
+        
+        if (!isCarersCard) {
           setCardValidation({ 
             isValid: false, 
             isChecking: false, 
@@ -100,9 +105,20 @@ const RenewCarers = () => {
         [name]: value
       });
 
-      // Validate card number when it changes
+      // Validate card number when it changes with debouncing
       if (name === 'cardNumber') {
-        validateCardNumber(value);
+        if (value.length > 3) {
+          // Clear previous timeout
+          if (validationTimeoutRef.current) {
+            clearTimeout(validationTimeoutRef.current);
+          }
+          // Set new timeout for validation
+          validationTimeoutRef.current = setTimeout(() => {
+            validateCardNumber(value);
+          }, 500);
+        } else {
+          setCardValidation({ isValid: false, isChecking: false, message: '' });
+        }
       }
     }
   };
@@ -121,7 +137,7 @@ const RenewCarers = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:5253/api/renewal/carers', {
+      const response = await fetch('https://api.ndaid.help/api/renewal/carers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -225,9 +241,9 @@ const RenewCarers = () => {
               {/* Current Card Information */}
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Current Card Information</h3>
-                <p className="text-sm text-blue-600 mb-4 bg-blue-50 p-3 rounded-lg">
+                <div className="text-sm text-blue-600 mb-4 bg-blue-50 p-3 rounded-lg">
                   <strong>Note:</strong> Verification is based on your Carers Card Number. Please enter your valid Carers Card number.
-                </p>
+                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>

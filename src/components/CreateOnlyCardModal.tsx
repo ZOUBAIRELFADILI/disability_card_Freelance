@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Calendar, User, FileText } from 'lucide-react';
+import { Calendar, CreditCard, FileText, User, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { createCard, checkCardNumberExists, CreateCardDto, getCardByApplication } from '../api/cardApi';
+import { checkCardNumberExists, createCard, CreateCardDto, getCardByApplication } from '../api/cardApi';
 
 interface CreateOnlyCardModalProps {
   isOpen: boolean;
@@ -13,7 +13,9 @@ interface CreateOnlyCardModalProps {
     lastName: string;
     cardType: 'disability' | 'carer' | 'customer_support';
     applicationType: string;
+    profilePicture?: string;
   };
+  manualCardNumberPrefix?: string;
 }
 
 const CreateOnlyCardModal: React.FC<CreateOnlyCardModalProps> = ({
@@ -69,36 +71,29 @@ const CreateOnlyCardModal: React.FC<CreateOnlyCardModalProps> = ({
         try {
           // Check if a card already exists for this application
           const existingCardResult = await getCardByApplication(applicationData.id, applicationData.cardType);
-          
           if (existingCardResult) {
-            // Card already exists, show message and prevent creation
             setCardAlreadyExists(true);
             return;
           } else {
-            // No card exists, prepare for creation only
             setCardAlreadyExists(false);
             const cardType = getCardTypeDisplayName(applicationData.cardType);
-            const prefix = getCardNumberPrefix(applicationData.cardType);
-            const randomNumber = Math.floor(100000000 + Math.random() * 900000000);
-            
+            // Always use NDAid- prefix for all card types
             setFormData({
-              cardNumber: `${prefix}${randomNumber}`,
+              cardNumber: 'NDAid-',
               cardholderName: `${applicationData.firstName} ${applicationData.lastName}`,
               cardType: cardType,
               issuedDate: new Date().toISOString().split('T')[0],
-              expiryDate: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 years from now
+              expiryDate: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
               status: 'Active',
               notes: ''
             });
           }
         } catch (error) {
           console.error('Error checking existing card:', error);
-          // If error, assume no card exists and proceed with creation
           setCardAlreadyExists(false);
         }
       }
     };
-
     checkExistingCardAndPrepareForm();
   }, [isOpen, applicationData]);
 
@@ -185,6 +180,35 @@ const CreateOnlyCardModal: React.FC<CreateOnlyCardModalProps> = ({
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Application Preview */}
+        <div className="px-6 py-4 bg-gray-50 border-b">
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0">
+              {applicationData.profilePicture ? (
+                <img
+                  src={applicationData.profilePicture}
+                  alt={`${applicationData.firstName} ${applicationData.lastName}`}
+                  className="h-16 w-16 rounded-full object-cover border-2 border-gray-200"
+                />
+              ) : (
+                <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-lg font-medium text-gray-600">
+                    {applicationData.firstName[0]}{applicationData.lastName[0]}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">
+                {applicationData.firstName} {applicationData.lastName}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {getCardTypeDisplayName(applicationData.cardType)} Application
+              </p>
+            </div>
+          </div>
         </div>
 
         {cardAlreadyExists ? (

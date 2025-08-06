@@ -393,7 +393,7 @@ const VerifiedLanyardApplicationsPage = () => {
                           </button>
                           {application.cardImagePath && (
                             <a
-                              href={`https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/${application.cardImagePath}`}
+                              href={`https://api.ndaid.help/${application.cardImagePath}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-green-600 hover:text-green-900"

@@ -1,8 +1,27 @@
-import { CheckCircle, Clock, CreditCard, Eye, Filter, Search, XCircle } from 'lucide-react';
+import { CheckCircle, Clock, CreditCard, Download, Eye, Filter, Search, XCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { adminAPI, DisabilityApplication } from '../api/adminApi';
 import CreateOnlyCardModal from '../components/CreateOnlyCardModal';
 import { useNotifications } from '../contexts/NotificationContext';
+
+const handleDirectDownload = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url, { credentials: 'include' });
+    if (!response.ok) throw new Error('Network response was not ok');
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(link.href);
+      document.body.removeChild(link);
+    }, 100);
+  } catch (error) {
+    alert('Failed to download file.');
+  }
+};
 
 const DisabilitiesPage: React.FC = () => {
   const [applications, setApplications] = useState<DisabilityApplication[]>([]);
@@ -85,94 +104,89 @@ const DisabilitiesPage: React.FC = () => {
 
   const ApplicationModal = ({ application }: { application: DisabilityApplication }) => (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white/95 backdrop-blur-md rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Disability Card Application Details</h2>
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20">
+        <div className="sticky top-0 bg-gradient-to-r from-green-50 to-white border-b px-8 py-5 flex justify-between items-center rounded-t-2xl">
+          <h2 className="text-2xl font-bold text-green-800 tracking-tight flex items-center gap-2">
+            <CreditCard className="w-6 h-6 text-green-600" /> Application Details
+          </h2>
           <button
             onClick={() => setShowModal(false)}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-400 hover:text-red-500 transition-colors text-2xl font-bold"
+            aria-label="Close"
           >
-            ✕
+            ×
           </button>
         </div>
-        
-        <div className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Personal Information */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Full Name</label>
-                    <p className="text-gray-900">{`${application.firstName} ${application.lastName}`}</p>
+        <div className="p-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Left: Profile & Medical Documents */}
+            <div className="space-y-8">
+              {/* Profile Image with Download */}
+              <div className="flex flex-col items-center bg-gray-50 rounded-xl p-6 shadow-sm border">
+                {application.profilePicture ? (
+                  <img
+                    src={application.profilePicture}
+                    alt={`${application.firstName} ${application.lastName}`}
+                    className="h-32 w-32 rounded-full object-cover border-4 border-green-200 shadow mb-3"
+                  />
+                ) : (
+                  <div className="h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center mb-3">
+                    <span className="text-2xl font-medium text-gray-600">
+                      {application.firstName[0]}{application.lastName[0]}
+                    </span>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                    <p className="text-gray-900">{new Date(application.dateOfBirth).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
-                    <p className="text-gray-900">{application.email}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <p className="text-gray-900">{application.phoneNumber}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Address</label>
-                    <p className="text-gray-900">{application.address}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Emirates ID</label>
-                    <p className="text-gray-900">{application.emiratesId}</p>
-                  </div>
+                )}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-base text-gray-700 font-semibold">Profile Image</span>
+                  {typeof application.profilePicture === 'string' && application.profilePicture && (
+                    <button
+                      type="button"
+                      onClick={() => handleDirectDownload(
+                        application.profilePicture || '',
+                        `Profile_${application.firstName}_${application.lastName}.jpg`
+                      )}
+                      className="hover:bg-green-100 p-2 rounded-full transition"
+                      title="Download Profile Image"
+                    >
+                      <Download className="w-5 h-5 text-green-700" />
+                    </button>
+                  )}
                 </div>
               </div>
-
-              {/* Disability Information */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Disability Information</h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Disability Type</label>
-                    <p className="text-gray-900">{application.disabilityType}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Disability Description</label>
-                    <p className="text-gray-900">{application.disabilityDescription}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Emergency Contact</label>
-                    <p className="text-gray-900">{application.emergencyContactName}</p>
-                    <p className="text-gray-600 text-sm">{application.emergencyContactPhone}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Photo and Status */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Medical Documents</h3>
+              {/* Medical Documents */}
+              <div className="bg-gray-50 rounded-xl p-6 shadow-sm border">
+                <h3 className="text-lg font-semibold mb-4 text-green-800 flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-green-600" /> Medical Documents
+                </h3>
                 {application.medicalDocuments && application.medicalDocuments.length > 0 ? (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {application.medicalDocuments.map((doc, index) => (
-                      <div key={doc.id} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between">
+                      <div key={doc.id} className="border rounded-lg p-4 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                           <div>
-                            <p className="font-medium text-gray-900">{doc.fileName}</p>
-                            <p className="text-sm text-gray-500">
+                          <p className="font-medium text-gray-900 flex items-center gap-2">
+                            {doc.fileName}
+                            <button
+                              type="button"
+                              onClick={() => handleDirectDownload(
+                                `https://api.ndaid.help/${doc.filePath}`,
+                                doc.fileName
+                              )}
+                              className="hover:bg-green-100 p-2 rounded-full transition"
+                              title="Download Document"
+                            >
+                              <Download className="w-5 h-5 text-green-700" />
+                            </button>
+                          </p>
+                          <p className="text-xs text-gray-500">
                               {(doc.fileSize / 1024 / 1024).toFixed(2)} MB • {doc.fileType}
                             </p>
-                          </div>
                         </div>
                         {doc.filePath && (doc.fileType.includes('image') || doc.fileType.includes('jpg') || doc.fileType.includes('png')) && (
-                          <div className="mt-3">
+                          <div className="mt-2 md:mt-0">
                             <img 
-                              src={`https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/${doc.filePath}`} 
+                              src={`https://api.ndaid.help/${doc.filePath}`} 
                               alt={`Document ${index + 1}`}
-                              className="w-full h-48 object-cover rounded border"
+                              className="w-32 h-20 object-cover rounded border"
                             />
                           </div>
                         )}
@@ -185,44 +199,87 @@ const DisabilitiesPage: React.FC = () => {
                   </div>
                 )}
               </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Application Status</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-2 ${getStatusColor(application.applicationStatus)}`}>
-                      {getStatusIcon(application.applicationStatus)}
-                      <span>{application.applicationStatus}</span>
-                    </span>
-                  </div>
-                  
+            </div>
+            {/* Right: Application Info */}
+            <div className="space-y-8">
+              {/* Personal Information */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border space-y-3">
+                <h3 className="text-lg font-semibold mb-4 text-green-800">Personal Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Applied Date</label>
-                    <p className="text-gray-900">{new Date(application.createdAt).toLocaleDateString()}</p>
+                    <label className="block text-xs font-medium text-gray-500">Full Name</label>
+                    <p className="text-gray-900 font-semibold">{`${application.firstName} ${application.lastName}`}</p>
                   </div>
-
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Date of Birth</label>
+                    <p className="text-gray-900">{new Date(application.dateOfBirth).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Email</label>
+                    <p className="text-gray-900">{application.email}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Phone Number</label>
+                    <p className="text-gray-900">{application.phoneNumber}</p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-gray-500">Address</label>
+                    <p className="text-gray-900">{application.address}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Emirates ID</label>
+                    <p className="text-gray-900">{application.emiratesId}</p>
+                  </div>
+                </div>
+              </div>
+              {/* Disability Information */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border space-y-3">
+                <h3 className="text-lg font-semibold mb-4 text-green-800">Disability Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Disability Type</label>
+                    <p className="text-gray-900">{application.disabilityType}</p>
+                  </div>
+              <div>
+                    <label className="block text-xs font-medium text-gray-500">Disability Description</label>
+                    <p className="text-gray-900">{application.disabilityDescription}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500">Emergency Contact</label>
+                    <p className="text-gray-900">{application.emergencyContactName}</p>
+                    <p className="text-gray-600 text-xs">{application.emergencyContactPhone}</p>
+                  </div>
+                </div>
+              </div>
+              {/* Application Status */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border space-y-3">
+                <h3 className="text-lg font-semibold mb-4 text-green-800">Application Status</h3>
+                <div className="flex items-center space-x-3 mb-2">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-2 ${getStatusColor(application.applicationStatus)}`}>
+                    {getStatusIcon(application.applicationStatus)}
+                    <span>{application.applicationStatus}</span>
+                  </span>
+                  <span className="text-xs text-gray-500">Applied: {new Date(application.createdAt).toLocaleDateString()}</span>
+                </div>
                   {application.applicationStatus.toLowerCase() === 'pending' && (
-                    <div className="space-y-3 pt-4 border-t">
-                      <p className="text-sm font-medium text-gray-700">Update Status:</p>
+                  <div className="space-y-3 pt-2 border-t">
+                    <p className="text-xs font-medium text-gray-700">Update Status:</p>
                       <div className="flex space-x-3">
                         <button
                           onClick={() => handleStatusUpdate(application.id, 'approved')}
-                          className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm"
                         >
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Approve
+                        <CheckCircle className="w-4 h-4 mr-2" /> Approve
                         </button>
                         <button
                           onClick={() => handleStatusUpdate(application.id, 'rejected')}
-                          className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
                         >
-                          <XCircle className="w-4 h-4 mr-2" />
-                          Reject
+                        <XCircle className="w-4 h-4 mr-2" /> Reject
                         </button>
                       </div>
                     </div>
                   )}
-                </div>
               </div>
             </div>
           </div>
@@ -293,10 +350,16 @@ const DisabilitiesPage: React.FC = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Profile
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Applicant
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Disability Type
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Lanyard Included
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
@@ -313,6 +376,23 @@ const DisabilitiesPage: React.FC = () => {
                 {filteredApplications.map((app) => (
                   <tr key={app.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center justify-center">
+                        {app.profilePicture ? (
+                          <img
+                            src={app.profilePicture}
+                            alt={`${app.firstName} ${app.lastName}`}
+                            className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
+                          />
+                        ) : (
+                          <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-sm font-medium text-gray-600">
+                              {app.firstName[0]}{app.lastName[0]}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">{`${app.firstName} ${app.lastName}`}</div>
                         <div className="text-sm text-gray-500">{app.email}</div>
@@ -321,6 +401,15 @@ const DisabilitiesPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{app.disabilityType}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        app.includeLanyard 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {app.includeLanyard ? 'Yes' : 'No'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(app.applicationStatus)}`}>
@@ -337,6 +426,7 @@ const DisabilitiesPage: React.FC = () => {
                           onClick={async () => {
                             setSelectedApplication(app);
                             setShowModal(true);
+                            console.log('Marking as viewed:', { type: 'disabilities', id: app.id });
                             markAsViewed('disabilities', app.id);
                           }}
                           className="text-blue-600 hover:text-blue-900"
@@ -404,7 +494,8 @@ const DisabilitiesPage: React.FC = () => {
             firstName: selectedApplicationForCard.firstName,
             lastName: selectedApplicationForCard.lastName,
             cardType: 'disability',
-            applicationType: 'disability'
+            applicationType: 'disability',
+            profilePicture: selectedApplicationForCard.profilePicture
           }}
         />
       )}

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Calendar, User, FileText } from 'lucide-react';
+import { Calendar, CreditCard, FileText, User, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { createCard, checkCardNumberExists, CreateCardDto, getCardByApplication, updateCard, Card } from '../api/cardApi';
+import { Card, checkCardNumberExists, createCard, CreateCardDto, getCardByApplication, updateCard } from '../api/cardApi';
 
 interface CreateCardModalProps {
   isOpen: boolean;
@@ -14,13 +14,15 @@ interface CreateCardModalProps {
     cardType: 'disability' | 'carer' | 'customer_support';
     applicationType: string;
   };
+  manualCardNumberPrefix?: string;
 }
 
 const CreateCardModal: React.FC<CreateCardModalProps> = ({
   isOpen,
   onClose,
   onCardCreated,
-  applicationData
+  applicationData,
+  manualCardNumberPrefix
 }) => {
   const [formData, setFormData] = useState({
     cardNumber: '',
@@ -31,10 +33,12 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
     status: 'Active',
     notes: ''
   });
+  const [manualNumberPart, setManualNumberPart] = useState('');
   const [loading, setLoading] = useState(false);
   const [checkingCardNumber, setCheckingCardNumber] = useState(false);
   const [existingCard, setExistingCard] = useState<Card | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   // Generate card type display name
   const getCardTypeDisplayName = (type: string) => {
@@ -52,27 +56,20 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
 
   // Generate card number prefix
   const getCardNumberPrefix = (type: string) => {
-    switch (type) {
-      case 'disability':
-        return 'ND-';
-      case 'carer':
-        return 'NC-';
-      case 'customer_support':
-        return 'NS-';
-      default:
-        return 'N-';
-    }
+    // Always use NDAid- prefix for all card types
+    return 'NDAid-';
   };
-
   useEffect(() => {
-    const checkExistingCard = async () => {
-      if (isOpen && applicationData) {
+    if (!isOpen) {
+      setInitialized(false);
+      return;
+    }
+    if (!initialized && isOpen && applicationData) {
+      const checkExistingCard = async () => {
         try {
           // Check if a card already exists for this application
           const existingCardResult = await getCardByApplication(applicationData.id, applicationData.cardType);
-          
           if (existingCardResult) {
-            // Card exists, load it for editing
             setExistingCard(existingCardResult);
             setIsEditMode(true);
             setFormData({
@@ -85,34 +82,32 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
               notes: existingCardResult.notes || ''
             });
           } else {
-            // No card exists, prepare for creation
             setExistingCard(null);
             setIsEditMode(false);
             const cardType = getCardTypeDisplayName(applicationData.cardType);
-            const prefix = getCardNumberPrefix(applicationData.cardType);
-            const randomNumber = Math.floor(100000000 + Math.random() * 900000000);
-            
+            let prefix = manualCardNumberPrefix || getCardNumberPrefix(applicationData.cardType);
+            setManualNumberPart('');
             setFormData({
-              cardNumber: `${prefix}${randomNumber}`,
+              cardNumber: `${prefix}`,
               cardholderName: `${applicationData.firstName} ${applicationData.lastName}`,
               cardType: cardType,
               issuedDate: new Date().toISOString().split('T')[0],
-              expiryDate: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 years from now
+              expiryDate: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
               status: 'Active',
               notes: ''
             });
           }
+          setInitialized(true);
         } catch (error) {
           console.error('Error checking existing card:', error);
-          // If error, assume no card exists and proceed with creation
           setExistingCard(null);
           setIsEditMode(false);
+          setInitialized(true);
         }
-      }
-    };
-
-    checkExistingCard();
-  }, [isOpen, applicationData]);
+      };
+      checkExistingCard();
+    }
+  }, [isOpen, applicationData, manualCardNumberPrefix, initialized]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -122,14 +117,15 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
     }));
   };
 
-  const handleCardNumberChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFormData(prev => ({ ...prev, cardNumber: value }));
-
-    if (value.length > 5) {
+  const handleManualNumberChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+    setManualNumberPart(value);
+    const fullCardNumber = `${manualCardNumberPrefix || getCardNumberPrefix(applicationData.cardType)}${value}`;
+    setFormData(prev => ({ ...prev, cardNumber: fullCardNumber }));
+    if (value.length > 0) {
       setCheckingCardNumber(true);
       try {
-        const exists = await checkCardNumberExists(value);
+        const exists = await checkCardNumberExists(fullCardNumber);
         if (exists) {
           toast.error('This card number already exists. Please use a different one.');
         }
@@ -222,16 +218,29 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
                 <CreditCard className="w-4 h-4 inline mr-1" />
                 Card Number
               </label>
-              <input
-                type="text"
-                name="cardNumber"
-                value={formData.cardNumber}
-                onChange={isEditMode ? undefined : handleCardNumberChange}
-                className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isEditMode ? 'bg-gray-50' : ''}`}
-                placeholder="Enter card number"
-                readOnly={isEditMode}
-                required
-              />
+              {isEditMode ? (
+                <input
+                  type="text"
+                  name="cardNumber"
+                  value={formData.cardNumber}
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-gray-50`}
+                  readOnly
+                  required
+                />
+              ) : (
+                <div className="flex">
+                  <span className="px-3 py-2 bg-gray-100 border border-gray-300 rounded-l-lg text-gray-700 font-semibold select-none">{manualCardNumberPrefix || getCardNumberPrefix(applicationData.cardType)}</span>
+                  <input
+                    type="text"
+                    name="manualNumberPart"
+                    value={manualNumberPart}
+                    onChange={handleManualNumberChange}
+                    className="w-full px-3 py-2 border-t border-b border-r border-gray-300 rounded-r-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Enter card number digits"
+                    required
+                  />
+                </div>
+              )}
               {checkingCardNumber && (
                 <p className="text-xs text-blue-600 mt-1">Checking availability...</p>
               )}

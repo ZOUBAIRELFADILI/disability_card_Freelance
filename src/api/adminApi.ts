@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://localhost:5253/api';
-// https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/api
+const API_BASE_URL = 'https://api.ndaid.help/api';
+// https://api.ndaid.help/api
 export interface LoginRequest {
   username: string;
   password: string;
@@ -120,7 +120,9 @@ export interface DisabilityApplication {
   emergencyContactName: string;
   emergencyContactPhone: string;
   applicationStatus: string;
+  includeLanyard: boolean;
   createdAt: string;
+  profilePicture?: string;
   medicalDocuments: Array<{
     id: number;
     fileName: string;
@@ -150,7 +152,9 @@ export interface CarersApplication {
   emergencyContactName: string;
   emergencyContactPhone: string;
   applicationStatus: string;
+  includeLanyard: boolean;
   createdAt: string;
+  profilePicture?: string;
 }
 
 export interface CustomerSupportApplication {
@@ -172,7 +176,9 @@ export interface CustomerSupportApplication {
   emergencyContactName: string;
   emergencyContactPhone: string;
   applicationStatus: string;
+  includeLanyard: boolean;
   createdAt: string;
+  profilePicture?: string;
 }
 
 export interface ContactSubmission {

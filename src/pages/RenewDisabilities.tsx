@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle, Clock, CreditCard, RefreshCw, Shield } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { trackCard } from '../api/cardApi';
 
 const RenewDisabilities = () => {
@@ -18,6 +18,7 @@ const RenewDisabilities = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const validationTimeoutRef = useRef<number | null>(null);
   const [cardValidation, setCardValidation] = useState<{
     isChecking: boolean;
     isValid: boolean;
@@ -53,16 +54,26 @@ const RenewDisabilities = () => {
       });
     }
 
-    // If card number is being changed, validate it
-    if (name === 'cardNumber' && value.length > 5) {
-      validateCardNumber(value);
-    } else if (name === 'cardNumber' && value.length <= 5) {
-      setCardValidation({
-        isChecking: false,
-        isValid: false,
-        cardData: null,
-        message: ''
-      });
+    // If card number is being changed, validate it with debouncing
+    if (name === 'cardNumber') {
+      if (value.length > 5) {
+        // Clear previous timeout
+        if (validationTimeoutRef.current) {
+          clearTimeout(validationTimeoutRef.current);
+        }
+        // Set new timeout for validation
+        validationTimeoutRef.current = setTimeout(() => {
+          validateCardNumber(value);
+        }, 500);
+      } else {
+        // Clear validation state if card number is too short
+        setCardValidation({
+          isChecking: false,
+          isValid: false,
+          cardData: null,
+          message: ''
+        });
+      }
     }
   };
 
@@ -133,7 +144,7 @@ const RenewDisabilities = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:5253/api/renewal/disabilities', {
+      const response = await fetch('https://api.ndaid.help/api/renewal/disabilities', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -235,9 +246,9 @@ const RenewDisabilities = () => {
               {/* Current Card Information */}
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Current Card Information</h3>
-                <p className="text-sm text-blue-600 mb-4 bg-blue-50 p-3 rounded-lg">
+                <div className="text-sm text-blue-600 mb-4 bg-blue-50 p-3 rounded-lg">
                   <strong>Note:</strong> Verification is based on your Card Number. Please enter your valid Disability Card number.
-                </p>
+                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>

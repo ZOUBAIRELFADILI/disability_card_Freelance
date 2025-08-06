@@ -178,7 +178,7 @@ const Partners: React.FC = () => {
                 <div className="flex items-center justify-center bg-green-50 h-32">
                   {partner.logo ? (
                     <img
-                      src={partner.logo.startsWith('http') ? partner.logo : `https://jolly-shadow-d2bf.elfadili-zoubair.workers.dev/${partner.logo}`}
+                      src={partner.logo.startsWith('http') ? partner.logo : `https://api.ndaid.help/${partner.logo}`}
                       alt={partner.name}
                       className="h-20 object-contain"
                       onError={(e) => {

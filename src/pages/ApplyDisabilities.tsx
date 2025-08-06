@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { applicationAPI } from '../api/applicationApi';
-import PaymentStep from '../components/PaymentStep';
+import PaymentStep from '../components/PaymentStepWorking';
 
 const ApplyDisabilities = () => {
   const navigate = useNavigate();
@@ -54,7 +54,6 @@ const ApplyDisabilities = () => {
   const baseAmount = 100;
   const lanyardAmount = 20;
   const totalAmount = baseAmount + (formData.includeLanyard ? lanyardAmount : 0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -167,7 +166,14 @@ const ApplyDisabilities = () => {
   const confirmSubmission = async () => {
     try {
       // Submit the basic application data (files will be handled separately later)
-      const response = await applicationAPI.submitDisabilityApplication(formData);
+      const applicationData = {
+        ...formData,
+        profilePicture: undefined // Don't include the file object in JSON
+      };
+      const response = await applicationAPI.submitDisabilityApplication({
+        ...applicationData,
+        profilePicture: profilePicture || undefined
+      });
       
       // If medical documents are provided, upload them separately
       if (formData.medicalDocuments.length > 0) {
@@ -659,9 +665,9 @@ const ApplyDisabilities = () => {
             cardType="Disability Card"
             paymentData={paymentData}
             onPaymentDataChange={handlePaymentInputChange}
-            onSubmit={handlePaymentSubmit}
-            isSubmitting={isSubmitting}
             includeLanyard={formData.includeLanyard}
+            applicationId={applicationId}
+            applicationType="Disability"
           />
         );
 
@@ -950,9 +956,9 @@ const ApplyDisabilities = () => {
                 cardType="Disability Card"
                 paymentData={paymentData}
                 onPaymentDataChange={handlePaymentInputChange}
-                onSubmit={handlePaymentSubmit}
-                isSubmitting={isSubmitting}
                 includeLanyard={formData.includeLanyard}
+                applicationId={applicationId}
+                applicationType="Disability"
               />
               
               <div className="flex justify-center space-x-4 mt-8 pt-6 border-t border-gray-200">

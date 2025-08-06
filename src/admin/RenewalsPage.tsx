@@ -22,6 +22,7 @@ interface RenewalApplication {
   cardNumber: string;
   renewalReason: string;
   renewalStatus: string;
+  profilePicture?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -52,13 +53,13 @@ const RenewalsPage: React.FC = () => {
       
       // Fetch all renewal types
       const [disabilitiesRes, carersRes, customerSupportRes] = await Promise.all([
-        fetch('http://localhost:5253/api/admin/renewals/disabilities', {
+        fetch('https://api.ndaid.help/api/renewal/disabilities', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5253/api/admin/renewals/carers', {
+        fetch('https://api.ndaid.help/api/renewal/carers', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5253/api/admin/renewals/customer-support', {
+        fetch('https://api.ndaid.help/api/renewal/customer-support', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -85,7 +86,8 @@ const RenewalsPage: React.FC = () => {
           lastName: item.lastName || item.LastName,
           email: item.email || item.Email,
           phoneNumber: item.phoneNumber || item.PhoneNumber,
-          renewalReason: item.renewalReason || item.RenewalReason
+          renewalReason: item.renewalReason || item.RenewalReason,
+          profilePicture: item.profilePicture || item.ProfilePicture
         })),
         ...(carersData || []).map((item: any) => ({ 
           ...item, 
@@ -99,7 +101,8 @@ const RenewalsPage: React.FC = () => {
           lastName: item.lastName || item.LastName,
           email: item.email || item.Email,
           phoneNumber: item.phoneNumber || item.PhoneNumber,
-          renewalReason: item.renewalReason || item.RenewalReason
+          renewalReason: item.renewalReason || item.RenewalReason,
+          profilePicture: item.profilePicture || item.ProfilePicture
         })),
         ...(customerSupportData || []).map((item: any) => ({ 
           ...item, 
@@ -113,7 +116,8 @@ const RenewalsPage: React.FC = () => {
           lastName: item.lastName || item.LastName,
           email: item.email || item.Email,
           phoneNumber: item.phoneNumber || item.PhoneNumber,
-          renewalReason: item.renewalReason || item.RenewalReason
+          renewalReason: item.renewalReason || item.RenewalReason,
+          profilePicture: item.profilePicture || item.ProfilePicture
         }))
       ];
 
@@ -148,7 +152,7 @@ const RenewalsPage: React.FC = () => {
         urlType = 'customer-support';
       }
       
-      const response = await fetch(`http://localhost:5253/api/admin/renewals/${urlType}/${id}/status`, {
+      const response = await fetch(`https://api.ndaid.help/api/renewal/${urlType}/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -346,6 +350,9 @@ const RenewalsPage: React.FC = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Profile
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Applicant
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -368,6 +375,23 @@ const RenewalsPage: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredRenewals.map((renewal) => (
                 <tr key={`${renewal.type}-${renewal.id}`} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center justify-center">
+                      {renewal.profilePicture ? (
+                        <img
+                          src={renewal.profilePicture}
+                          alt={`${renewal.firstName} ${renewal.lastName}`}
+                          className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-sm font-medium text-gray-600">
+                            {renewal.firstName[0]}{renewal.lastName[0]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
