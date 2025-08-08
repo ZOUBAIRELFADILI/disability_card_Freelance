@@ -3,23 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { adminAPI, DisabilityApplication } from '../api/adminApi';
 import CreateOnlyCardModal from '../components/CreateOnlyCardModal';
 import { useNotifications } from '../contexts/NotificationContext';
+import { smartDownload } from '../utils/downloadUtils';
+import { convertToProductionUrl } from '../utils/urlUtils';
 
 const handleDirectDownload = async (url: string, filename: string) => {
   try {
-    const response = await fetch(url, { credentials: 'include' });
-    if (!response.ok) throw new Error('Network response was not ok');
-    const blob = await response.blob();
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(() => {
-      window.URL.revokeObjectURL(link.href);
-      document.body.removeChild(link);
-    }, 100);
+    await smartDownload(url, filename);
+    // Optional: Show success notification
+    console.log(`Download started: ${filename}`);
+    // You could add a toast notification here if desired
   } catch (error) {
-    alert('Failed to download file.');
+    console.error('Download failed:', error);
+    // Show user-friendly error message
+    alert('Download failed. The file will open in a new tab instead.');
+    window.open(url, '_blank');
   }
 };
 
@@ -125,7 +122,7 @@ const DisabilitiesPage: React.FC = () => {
               <div className="flex flex-col items-center bg-gray-50 rounded-xl p-6 shadow-sm border">
                 {application.profilePicture ? (
                   <img
-                    src={application.profilePicture}
+                    src={convertToProductionUrl(application.profilePicture)}
                     alt={`${application.firstName} ${application.lastName}`}
                     className="h-32 w-32 rounded-full object-cover border-4 border-green-200 shadow mb-3"
                   />
@@ -142,7 +139,7 @@ const DisabilitiesPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleDirectDownload(
-                        application.profilePicture || '',
+                        convertToProductionUrl(application.profilePicture || ''),
                         `Profile_${application.firstName}_${application.lastName}.jpg`
                       )}
                       className="hover:bg-green-100 p-2 rounded-full transition"
@@ -168,7 +165,7 @@ const DisabilitiesPage: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleDirectDownload(
-                                `https://api.ndaid.help/${doc.filePath}`,
+                                convertToProductionUrl(doc.filePath),
                                 doc.fileName
                               )}
                               className="hover:bg-green-100 p-2 rounded-full transition"
@@ -379,7 +376,7 @@ const DisabilitiesPage: React.FC = () => {
                       <div className="flex items-center justify-center">
                         {app.profilePicture ? (
                           <img
-                            src={app.profilePicture}
+                            src={convertToProductionUrl(app.profilePicture)}
                             alt={`${app.firstName} ${app.lastName}`}
                             className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
                           />

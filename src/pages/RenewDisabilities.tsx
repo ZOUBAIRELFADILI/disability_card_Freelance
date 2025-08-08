@@ -1,3 +1,4 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 import { ArrowRight, CheckCircle, Clock, CreditCard, RefreshCw, Shield } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { trackCard } from '../api/cardApi';
@@ -144,7 +145,7 @@ const RenewDisabilities = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('https://api.ndaid.help/api/renewal/disabilities', {
+      const response = await fetch(`${API_BASE_URL}/renewal/disabilities`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api.ndaid.help/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface ContactSubmissionRequest {
   fullName: string;

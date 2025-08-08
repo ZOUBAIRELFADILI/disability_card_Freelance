@@ -1,3 +1,4 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 import { useEffect, useState } from 'react';
 
 export interface NotificationCounts {
@@ -107,7 +108,7 @@ export const useNotificationCounts = () => {
       setLoading(true);
       
       // Fetch counts from dashboard stats endpoint
-      const response = await fetch('https://api.ndaid.help/api/Admin/dashboard/stats', {
+      const response = await fetch(`${API_BASE_URL}/Admin/dashboard/stats`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
           'Content-Type': 'application/json'

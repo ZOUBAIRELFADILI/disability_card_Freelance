@@ -1,5 +1,5 @@
 // API functions for renewal applications
-const BASE_URL = 'https://api.ndaid.help/api';
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface RenewalApplication {
   id: number;

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { CreditCard, Lock, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { AlertCircle, ArrowLeft, CreditCard, Lock } from 'lucide-react';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { createCheckoutSession, redirectToCheckout } from '../utils/stripe';
 
 interface PaymentProps {
@@ -16,6 +16,8 @@ const StripePayment: React.FC = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const STRIPE_SERVICE_URL = import.meta.env.VITE_STRIPE_SERVICE_URL || 'http://localhost:3001';
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -23,7 +25,7 @@ const StripePayment: React.FC = () => {
 
     try {
       // Check if backend is available first
-      const healthCheck = await fetch('http://localhost:3001/health').catch(() => null);
+      const healthCheck = await fetch(`${STRIPE_SERVICE_URL}/health`).catch(() => null);
       
       if (!healthCheck || !healthCheck.ok) {
         throw new Error('Payment service is currently unavailable. Please try again later or contact support.');

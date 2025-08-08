@@ -1,3 +1,4 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ const PartnersCarousel: React.FC = () => {
     // Fetch partners from API
     const fetchPartners = async () => {
       try {
-        const response = await fetch('https://api.ndaid.help/api/partners');
+        const response = await fetch(`${API_BASE_URL}/partners`);
         if (response.ok) {
           const data = await response.json();
           // Take only first 8 partners for the carousel

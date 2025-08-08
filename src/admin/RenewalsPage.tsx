@@ -1,3 +1,4 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 import {
     CheckCircle,
     Clock,
@@ -10,6 +11,7 @@ import {
     XCircle
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { convertToProductionUrl } from '../utils/urlUtils';
 
 interface RenewalApplication {
   id: number;
@@ -53,13 +55,13 @@ const RenewalsPage: React.FC = () => {
       
       // Fetch all renewal types
       const [disabilitiesRes, carersRes, customerSupportRes] = await Promise.all([
-        fetch('https://api.ndaid.help/api/renewal/disabilities', {
+        fetch(`${API_BASE_URL}/renewal/disabilities`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('https://api.ndaid.help/api/renewal/carers', {
+        fetch(`${API_BASE_URL}/renewal/carers`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('https://api.ndaid.help/api/renewal/customer-support', {
+        fetch(`${API_BASE_URL}/renewal/customer-support`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -152,7 +154,7 @@ const RenewalsPage: React.FC = () => {
         urlType = 'customer-support';
       }
       
-      const response = await fetch(`https://api.ndaid.help/api/renewal/${urlType}/${id}/status`, {
+      const response = await fetch(`${API_BASE_URL}/renewal/${urlType}/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -379,7 +381,7 @@ const RenewalsPage: React.FC = () => {
                     <div className="flex items-center justify-center">
                       {renewal.profilePicture ? (
                         <img
-                          src={renewal.profilePicture}
+                          src={convertToProductionUrl(renewal.profilePicture)}
                           alt={`${renewal.firstName} ${renewal.lastName}`}
                           className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
                         />
